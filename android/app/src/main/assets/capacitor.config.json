@@ -1,0 +1,6 @@
+{
+	"appId": "com.ziro.financer",
+	"appName": "Financer",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
