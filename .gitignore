@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+.browserslistrc
+.eslintrc.js
 
 
 # local env files
