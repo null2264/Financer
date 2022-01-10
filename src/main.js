@@ -81,33 +81,27 @@ window.addEventListener("DOMContentLoaded", async () => {
                 INSERT OR IGNORE INTO financer (version)
                 VALUES ('0.0.0');
             `);
+        } else {
+            console.log("Welcome back!");
+            /*
+             TODO: Do migration check
+             - If version doesn't matched check if there's migration script
+               - If migration script exists, try running it
+               - Else do nothing
+             - Edit meta table's version to match current version
+            */
         }
+
+        // Assuming there's no migration needed
+        await db.execute(`
+            CREATE TABLE IF NOT EXISTS profile (
+                id INTEGER NOT NULL PRIMARY KEY,
+                username TEXT NOT NULL,
+                password TEXT NUT NULL
+            );
+        `);
 
         await sqlite.closeConnection("database");
-
-        /*
-        // Database creation example
-        const ret = await sqlite.checkConnectionsConsistency();
-        const isConn = (await sqlite.isConnection("db_tab3")).result;
-        let db: SQLiteDBConnection
-        if (ret.result && isConn) {
-            db = await sqlite.retrieveConnection("db_tab3");
-        } else {
-            db = await sqlite.createConnection("db_tab3", false, "no-encryption", 1);
-        }
-        await db.open();
-        const query = `
-        CREATE TABLE IF NOT EXISTS test (
-            id INTEGER PRIMARY KEY NOT NULL,
-            name TEXT NOT NULL
-        );
-        `
-        const res = await db.execute(query);
-        if(res.changes && res.changes.changes && res.changes.changes < 0) {
-            throw new Error(`Error: execute failed`);
-        }
-        await sqlite.closeConnection("db_tab3");
-        */
 
         router.isReady().then(() => {
             app.mount("#app");
