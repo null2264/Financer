@@ -76,6 +76,7 @@ body {
 .btn {
     text-decoration: none;
     font-size: 1rem;
+    border: 0px;
 }
 
 .btn.btn-fill {

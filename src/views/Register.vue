@@ -1,33 +1,42 @@
 <template>
     <div class="register">
         <div class="form">
-            <div class="formInner">
-                <div id="username" class="formChild">
-                    <span>Username / Email</span>
-                    <input type="text" class="username"/>
+            <form class="formInner" @submit.prevent="doRegister">
+                <div class="formChild">
+                    <span>Username</span>
+                    <input type="text" v-model="username" name="username" class="username"/>
                 </div>
 
-                <div id="password" class="formChild">
+                <div class="formChild">
                     <span>Password</span>
-                    <input type="password" class="password"/>
+                    <input type="password" v-model="password" name="password" class="password"/>
                 </div>
 
                 <div id="buttons" class="formChild">
-                    <a class="btn btn-fill" @click="doRegister">Register</a>
+                    <button class="btn btn-fill">Register</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: "Login",
+    name: "Register",
+    data () {
+        return {
+            username: "",
+            password: "",
+        }
+    },
     methods: {
-        doRegister() {
-            this.$swal("Oops!", "こんにちは World!", "error");
+        doRegister(e) {
+            if (!this.username || !this.password)
+                this.$swal("Oops!", "<b>Username</b> and/or <b>Password</b> can't be empty!", "error");
+            else
+                this.$swal("Registered", `${this.username}:${this.password}`, "success");
         },
-    }
+    },
 }
 </script>
 

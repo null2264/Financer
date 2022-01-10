@@ -1,5 +1,5 @@
 <template>
-    <AppLayoutBackBar fgColour="#000000" title="Test"/>
+    <AppLayoutBackBar fgColour="#000000" title="New Profile"/>
     <div>
         <slot />
     </div>
