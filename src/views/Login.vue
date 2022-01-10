@@ -45,7 +45,6 @@ export default {
     flex-direction: column;
     .greeting {
         color: white;
-        padding-top: 1.8rem;
         .image#login {
             height: 120px;
         }

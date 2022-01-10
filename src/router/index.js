@@ -26,7 +26,15 @@ const routes = [
         meta: {
             layout: "AppLayoutLoggedIn"
         }
-    }
+    },
+    {
+        path: "/register",
+        name: "Register",
+        component: () => import("@/views/Register.vue"),
+        meta: {
+            layout: "AppLayoutRegister"
+        }
+    },
 ]
 
 const router = createRouter({

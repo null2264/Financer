@@ -54,6 +54,37 @@ window.addEventListener("DOMContentLoaded", async () => {
             await sqlite.initWebStore();
         }
 
+        // Init the database
+        const ret = await sqlite.checkConnectionsConsistency();
+        const isConn = (await sqlite.isConnection("database")).result;
+        let db
+        if (ret.result && isConn) {
+            db = await sqlite.retrieveConnection("database");
+        } else {
+            db = await sqlite.createConnection("database", false, "no-encryption", 1);
+        }
+        await db.open();
+
+        // Meta table
+        // - version: Keep track of db version (incase the db structure changed in the future)
+        await db.execute(`
+            CREATE TABLE IF NOT EXISTS financer (
+                version TEXT NOT NULL UNIQUE
+            );
+        `);
+
+        const res = await db.query("SELECT * FROM financer;");
+
+        if (!res.values.length) {
+            console.log("Welcome to Financer!");
+            await db.execute(`
+                INSERT OR IGNORE INTO financer (version)
+                VALUES ('0.0.0');
+            `);
+        }
+
+        await sqlite.closeConnection("database");
+
         /*
         // Database creation example
         const ret = await sqlite.checkConnectionsConsistency();
@@ -82,7 +113,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             app.mount("#app");
         });
     }
-    catch (e) {
+    catch (err) {
         console.log(`Error: ${err}`);
         throw new Error(`Error: ${err}`)
     }
