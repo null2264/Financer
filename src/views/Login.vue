@@ -4,16 +4,16 @@
             <h2>Welcome Back</h2>
             <img class="image" id="login" src="../assets/login.png"/>
         </div>
-        <div class="loginForm">
+        <form class="loginForm" @submit.prevent="doLogin">
             <div class="formInner">
-                <div id="username" class="formChild">
-                    <span>Username / Email</span>
-                    <input type="text" class="username"/>
+                <div class="formChild">
+                    <span>Username</span>
+                    <input type="text" v-model="username" name="username" class="username"/>
                 </div>
 
-                <div id="password" class="formChild">
+                <div class="formChild">
                     <span>Password</span>
-                    <input type="password" class="password"/>
+                    <input type="password" v-model="password" name="password" class="password"/>
                     <a class="btn btn-subtle" href="#" style="padding-top:5px;">Forgot password?</a>
                 </div>
 
@@ -21,18 +21,59 @@
                     <a class="btn btn-fill" @click="doLogin">Login</a>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </template>
 
 <script>
+import { getCurrentInstance } from "vue";
+
 export default {
     name: "Login",
+    data() {
+        return {
+            username: "",
+            password: "",
+        }
+    },
+    setup() {
+        const app = getCurrentInstance();
+        const sqlite = app?.appContext.config.globalProperties.$sqlite;
+
+        return { sqlite };
+    },
     methods: {
-        doLogin() {
-            this.$swal("Oops!", "こんにちは World!", "error");
+        async doLogin(e) {
+            if (!this.username || !this.password)
+                return this.$swal("Oops!", "<b>Username</b> and/or <b>Password</b> can't be empty!", "error");
+
+            const sqlite = this.sqlite;
+
+            const ret = await sqlite.checkConnectionsConsistency();
+            const isConn = (await sqlite.isConnection("database")).result;
+
+            let db
+            if (ret.result && isConn) {
+                db = await sqlite.retrieveConnection("database");
+            } else {
+                db = await sqlite.createConnection("database", false, "no-encryption", 1);
+            }
+            await db.open();
+
+            const user = await db.query("SELECT * FROM profile WHERE username = ?", [this.username]);
+            if (!user.values.length)
+                return this.$swal("Oops!", `<b>Username</b> "${this.username}" is not exists`, "error");
+
+            const curUser = user.values[0];
+
+            if (curUser.password != this.password)
+                return this.$swal("Oops!", `<b>Password</b> is incorrect`, "error");
+
+            await sqlite.closeConnection("database");
+
+            this.$router.push("/dashboard");
         },
-    }
+    },
 }
 </script>
 
