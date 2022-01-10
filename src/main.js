@@ -96,7 +96,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         await db.execute(`
             CREATE TABLE IF NOT EXISTS profile (
                 id INTEGER NOT NULL PRIMARY KEY,
-                username TEXT NOT NULL,
+                username TEXT NOT NULL UNIQUE,
                 password TEXT NUT NULL
             );
         `);
