@@ -5,7 +5,7 @@
                 <vue-feather type="chevron-left" size="30px"/>
                 <span>Back</span>
             </a>
-            <span class="title" v-if="title != null">{{ title }}</span>
+            <span class="title" v-if="!!title">{{ title }}</span>
         </div>
     </div>
 </template>
@@ -20,7 +20,6 @@ export default {
         },
         title: {
             type: String,
-            default: null,
         }
     },
     methods: {
@@ -34,9 +33,6 @@ export default {
                 "--fg-back-navbar": this.fgColour,
             }
         },
-        title() {
-            return this.title
-        }
     },
 }
 </script>
