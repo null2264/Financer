@@ -79,10 +79,22 @@ window.addEventListener("DOMContentLoaded", async () => {
             console.log("Welcome to Financer!");
             await db.execute(`
                 INSERT OR IGNORE INTO financer (version)
-                VALUES ('0.0.0');
+                VALUES ('0.0.1');
+            `);
+
+            // Assuming there's no migration needed
+            await db.execute(`
+                CREATE TABLE IF NOT EXISTS profile (
+                    id INTEGER NOT NULL PRIMARY KEY,
+                    username TEXT NOT NULL UNIQUE
+                );
             `);
         } else {
             console.log("Welcome back!");
+            if (res.values[0].version == '0.0.0') {
+                await db.execute("ALTER TABLE profile DROP password;");
+                await db.execute("UPDATE financer SET version = '0.0.1';");
+            }
             /*
              TODO: Do migration check
              - If version doesn't matched check if there's migration script
@@ -91,15 +103,6 @@ window.addEventListener("DOMContentLoaded", async () => {
              - Edit meta table's version to match current version
             */
         }
-
-        // Assuming there's no migration needed
-        await db.execute(`
-            CREATE TABLE IF NOT EXISTS profile (
-                id INTEGER NOT NULL PRIMARY KEY,
-                username TEXT NOT NULL UNIQUE,
-                password TEXT NUT NULL
-            );
-        `);
 
         await sqlite.closeConnection("database");
 

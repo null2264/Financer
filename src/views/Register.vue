@@ -6,13 +6,8 @@
                 <input type="text" v-model="username" name="username" class="username"/>
             </div>
 
-            <div class="formChild">
-                <span>Password</span>
-                <input type="password" v-model="password" name="password" class="password"/>
-            </div>
-
             <div id="buttons" class="formChild">
-                <button class="btn btn-fill">Register</button>
+                <button class="btn btn-fill">Create new Profile</button>
             </div>
         </form>
     </div>
@@ -26,7 +21,6 @@ export default {
     data() {
         return {
             username: "",
-            password: "",
         }
     },
     setup() {
@@ -37,8 +31,8 @@ export default {
     },
     methods: {
         async doRegister(e) {
-            if (!this.username || !this.password)
-                return this.$swal("Oops!", "<b>Username</b> and/or <b>Password</b> can't be empty!", "error");
+            if (!this.username)
+                return this.$swal("Oops!", "<b>Username</b> can't be empty!", "error");
 
             const sqlite = this.sqlite;
 
@@ -55,12 +49,12 @@ export default {
 
             console.log([this.username, this.password]);
             try {
-                await db.run("INSERT INTO profile (username, password) VALUES (?, ?);", [this.username, this.password]);
-                this.$swal("Registered", `${this.username}:${this.password}`, "success");
+                await db.run("INSERT INTO profile (username) VALUES (?);", [this.username]);
+                this.$swal("Registered", `Profile named '${this.username}' has been created`, "success");
             }
             catch (e) {
                 console.log(e);
-                this.$swal("Oops!", `<b>Username</b> "${this.username}" is already taken`, "error");
+                this.$swal("Oops!", `<b>Profile</b> named '${this.username}' is already exists`, "error");
             };
 
             await sqlite.closeConnection("database");

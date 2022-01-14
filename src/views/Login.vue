@@ -4,51 +4,36 @@
             <h2>Welcome Back</h2>
             <img class="image" id="login" src="../assets/login.png"/>
         </div>
-        <form class="loginForm" @submit.prevent="doLogin">
-            <div class="formInner">
-                <div class="formChild">
-                    <span>Username</span>
-                    <input type="text" v-model="username" name="username" class="username"/>
-                </div>
-
-                <div class="formChild">
-                    <span>Password</span>
-                    <input type="password" v-model="password" name="password" class="password"/>
-                    <a class="btn btn-subtle" href="#" style="padding-top:5px;">Forgot password?</a>
-                </div>
-
-                <div id="buttons" class="formChild">
-                    <a class="btn btn-fill" @click="doLogin">Login</a>
+        <div class="users">
+            <div class="users-title">
+                Choose your Profile
+            </div>
+            <div class="users-inner">
+                <div class="user" v-for="user in users">
+                    <div class="detail">
+                        <div class="avatar">
+                            <a>A</a>
+                        </div>
+                        <a class="name">{{ user.username }}</a>
+                    </div>
+                    <button class="btn btn-fill">Use</button>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </template>
 
 <script>
-import { getCurrentInstance } from "vue";
+import { ref, getCurrentInstance, onMounted } from "vue";
 
 export default {
     name: "Login",
-    data() {
-        return {
-            username: "",
-            password: "",
-        }
-    },
     setup() {
+        const users = ref("");
         const app = getCurrentInstance();
         const sqlite = app?.appContext.config.globalProperties.$sqlite;
 
-        return { sqlite };
-    },
-    methods: {
-        async doLogin(e) {
-            if (!this.username || !this.password)
-                return this.$swal("Oops!", "<b>Username</b> and/or <b>Password</b> can't be empty!", "error");
-
-            const sqlite = this.sqlite;
-
+        onMounted(async () => {
             const ret = await sqlite.checkConnectionsConsistency();
             const isConn = (await sqlite.isConnection("database")).result;
 
@@ -60,18 +45,19 @@ export default {
             }
             await db.open();
 
-            const user = await db.query("SELECT * FROM profile WHERE username = ?", [this.username]);
-            if (!user.values.length)
-                return this.$swal("Oops!", `<b>Username</b> "${this.username}" is not exists`, "error");
+            const query = await db.query("SELECT username FROM profile");
 
-            const curUser = user.values[0];
-
-            if (curUser.password != this.password)
-                return this.$swal("Oops!", `<b>Password</b> is incorrect`, "error");
+            users.value = query.values;
 
             await sqlite.closeConnection("database");
+        });
 
-            this.$router.push("/dashboard");
+        return { users };
+    },
+    methods: {
+        async doLogin(e) {
+            console.log(this.users);
+            /* this.$router.push("/dashboard"); */
         },
     },
 }
@@ -97,35 +83,43 @@ export default {
     }
 }
 
-.loginForm {
+.users {
     color: black;
     background-color: white;
     width: 100%;
     height: 100%;
     bottom: 0px;
     border-radius: 30px 30px 0px 0px;
-    .formInner {
-        box-sizing: border-box;
-        width: 100%;
-        padding: 12px;
-        padding-top: 40px;
-        display: flex;
-        flex-direction: column;
-        align-content: flex-start;
-        align-items: flex-start;
-        justify-content: flex-start;
-        .formChild {
+    .users-title {
+        padding-top: 20px;
+    }
+    .users-inner {
+        padding: 20px;
+        .user {
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid gray;
             display: flex;
-            width: 100%;
-            flex-direction: column;
-            align-items: flex-start;
-            padding-bottom: 20px;
-            flex-wrap: wrap;
-            input, .btn {
-                width: stretch;
+            flex-direction: row;
+            align-content: center;
+            justify-content: space-between;
+            align-items: center;
+            &:not(:last-child) {
+                margin-bottom: 10px;
             }
-            .btn.btn-subtle {
-                text-align: left;
+            .detail {
+                display: flex;
+                align-items: center;
+                .avatar {
+                    width: 45px;
+                    height: 45px;
+                    margin-right: 10px;
+                    background-color: gray;
+                    border-radius: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
             }
         }
     }
