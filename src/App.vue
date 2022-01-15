@@ -8,7 +8,7 @@
 
 <script>
 import AppLayout from "@/layouts/AppLayout";
-import { defineComponent, getCurrentInstance } from "vue";
+import { defineComponent, getCurrentInstance, onMounted } from "vue";
 import { useSQLite } from "vue-sqlite-hook";
 
 export default {
@@ -49,6 +49,23 @@ export default {
                 onProgressExport
             });
         }
+
+        onMounted(async () => {
+            const sqlite = app.appContext.config.globalProperties.$sqlite
+
+            const ret = await sqlite.checkConnectionsConsistency();
+            const isConn = (await sqlite.isConnection("database")).result;
+
+            let db
+            if (ret.result && isConn) {
+                db = await sqlite.retrieveConnection("database");
+            } else {
+                db = await sqlite.createConnection("database", false, "no-encryption", 1);
+            }
+            await db.open();
+
+            app?.appContext.config.globalProperties.$existingConn.setExistConn(true);
+        })
         return;
     }
 };

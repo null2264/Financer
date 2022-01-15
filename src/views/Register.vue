@@ -36,28 +36,28 @@ export default {
 
             const sqlite = this.sqlite;
 
-            const ret = await sqlite.checkConnectionsConsistency();
-            const isConn = (await sqlite.isConnection("database")).result;
+            const db = await sqlite.retrieveConnection("database");
 
-            let db
-            if (ret.result && isConn) {
-                db = await sqlite.retrieveConnection("database");
-            } else {
-                db = await sqlite.createConnection("database", false, "no-encryption", 1);
-            }
             await db.open();
 
-            console.log([this.username, this.password]);
             try {
-                await db.run("INSERT INTO profile (username) VALUES (?);", [this.username]);
-                this.$swal("Registered", `Profile named '${this.username}' has been created`, "success");
+                const res = await db.run(
+                    "INSERT INTO profile (username) VALUES (?);",
+                    [this.username]
+                );
+                console.log(res);
+                this.$swal(
+                    "Registered",
+                    `Profile named '${this.username}' has been created`,
+                    "success"
+                ).then(() => {
+                    this.$router.push("/login");
+                });
             }
             catch (e) {
                 console.log(e);
                 this.$swal("Oops!", `<b>Profile</b> named '${this.username}' is already exists`, "error");
             };
-
-            await sqlite.closeConnection("database");
         },
     },
 }

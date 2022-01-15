@@ -16,7 +16,7 @@
                         </div>
                         <a class="name">{{ user.username }}</a>
                     </div>
-                    <button class="btn btn-fill">Use</button>
+                    <button @click="useProfile()" class="btn btn-fill">Use</button>
                 </div>
             </div>
         </div>
@@ -48,16 +48,14 @@ export default {
             const query = await db.query("SELECT username FROM profile");
 
             users.value = query.values;
-
-            await sqlite.closeConnection("database");
         });
 
         return { users };
     },
     methods: {
-        async doLogin(e) {
+        async useProfile(e) {
             console.log(this.users);
-            /* this.$router.push("/dashboard"); */
+            this.$router.push("/dashboard");
         },
     },
 }
@@ -110,6 +108,9 @@ export default {
             .detail {
                 display: flex;
                 align-items: center;
+                .name {
+                    font-size: 1.1rem;
+                }
                 .avatar {
                     width: 45px;
                     height: 45px;
@@ -120,6 +121,10 @@ export default {
                     align-items: center;
                     justify-content: center;
                 }
+            }
+            .btn-fill {
+                font-size: 1.1rem;
+                padding-inline: 30px;
             }
         }
     }
