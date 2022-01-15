@@ -6,10 +6,32 @@
             </div>
             <div class="body">
                 <div class="chart">
-                    <LineChart :chartData="testData" :options="options"/>
+                    <a href="#" class="btn">
+                        <div class="detail">
+                            <div class="info">
+                                <a>Income</a>
+                                <a>Last Month</a>
+                            </div>
+                            <div class="percentage">
+                                <span>5.2%</span>
+                            </div>
+                        </div>
+                        <LineChart class="graph" :chartData="testData" :options="options"/>
+                    </a>
                 </div>
                 <div class="chart">
-                    <LineChart :chartData="testData" :options="options"/>
+                    <a href="#" class="btn">
+                        <div class="detail">
+                            <div class="info">
+                                <a>Outcome</a>
+                                <a>Last Month</a>
+                            </div>
+                            <div class="percentage">
+                                <span>5.2%</span>
+                            </div>
+                        </div>
+                        <LineChart class="graph" :chartData="testData" :options="options"/>
+                    </a>
                 </div>
             </div>
         </div>
@@ -50,6 +72,11 @@ export default {
         };
         const options = {
             responsive: true,
+            layout: {
+                padding: {
+                    bottom: 0,
+                },
+            },
             plugins: {
                 legend: {
                     display: false,
@@ -58,7 +85,7 @@ export default {
                     display: false,
                 },
                 tooltip: {
-                    enabled: false
+                    enabled: false,
                 },
             },
             scales: {
@@ -88,9 +115,30 @@ body {
         flex-direction: row;
         overflow-x: auto;
         max-height: 200px;
-        .chart div {
-            min-width: 250px;
-            height: 200px;
+        .chart {
+            padding: 20px;
+            padding-bottom: 0;
+            .btn {
+                color: black;
+                .detail {
+                    display: flex;
+                    padding-inline: 20px;
+                    padding-bottom: 5px;
+                    justify-content: space-between;
+                    .info {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        a { padding-bottom: 4px; }
+                    }
+                }
+                .graph {
+                    min-width: 210px;
+                    height: 110px;
+                    box-shadow: 0px 6px 6px -2px grey;
+                    margin-bottom: 10px;
+                }
+            }
         }
     }
 }
