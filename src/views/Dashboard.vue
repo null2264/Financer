@@ -1,16 +1,23 @@
 <template>
     <div class="dashboard">
-        <h2>Chart</h2>
-        <LineChart :chartData="testData" :options="options"/>
+        <div class="charts">
+            <div class="title">
+                <h2>Chart</h2>
+            </div>
+            <div class="content">
+                <LineChart :chartData="testData" :options="options"/>
+                <LineChart :chartData="testData" :options="options"/>
+            </div>
+        </div>
         <h2>History</h2>
     </div>
 </template>
 
 <script>
 import { LineChart } from "vue-chart-3";
-import { Chart, registerables } from "chart.js";
+import { Chart, LineElement, PointElement, LineController, CategoryScale, LinearScale, Filler } from "chart.js";
 
-Chart.register(...registerables);
+Chart.register(LineElement, PointElement, LineController, CategoryScale, LinearScale, Filler);
 
 export default {
     name: "Dashboard",
@@ -23,11 +30,16 @@ export default {
             datasets: [
                 {
                     data: [30, 40, 60, 70, 5],
-                    backgroundColor: ["#77CEFF", "#0079AF", "#123E6B", "#97B0C4", "#A5C8ED"],
-                    borderColor: "rgb(75, 192, 192)",
-                    tension: 0.2,
+                    backgroundColor: "#C9F4E8",
+                    borderWidth: 2,
+                    borderColor: "#855CF8",
+                    pointBackgroundColor: "#855CF8",
+                    pointRadius: 5.5,
+                    pointHitRadius: 0,
+                    pointBorderWidth: 1,
+                    pointBorderColor: "#FFFFFF",
+                    tension: 0.4,
                     fill: true,
-                    showLine: false,
                     drawActiveElementsOnTop: false,
                 },
             ],
@@ -60,9 +72,22 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 body {
     color: white;
     background-color: white;
+}
+
+.charts {
+    .content {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        max-height: 200px;
+        div {
+            min-width: 250px;
+            height: 200px;
+        }
+    }
 }
 </style>
