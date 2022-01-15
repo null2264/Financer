@@ -5,10 +5,10 @@
             <img class="image" id="login" src="../assets/login.png"/>
         </div>
         <div class="users">
-            <div class="users-title">
+            <div class="title">
                 Choose your Profile
             </div>
-            <div class="users-inner">
+            <div class="body">
                 <div class="user" v-for="user in users">
                     <div class="detail">
                         <div class="avatar">
@@ -88,13 +88,17 @@ export default {
     height: 100%;
     bottom: 0px;
     border-radius: 30px 30px 0px 0px;
-    .users-title {
+    .title {
         padding-top: 20px;
     }
-    .users-inner {
+    .body {
+        display: flex;
         padding: 20px;
+        flex-direction: column;
+        max-height: 450px;
+        overflow-y: auto;
         .user {
-            padding: 20px;
+            padding: 15px;
             border-radius: 20px;
             border: 1px solid gray;
             display: flex;

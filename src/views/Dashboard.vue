@@ -4,9 +4,13 @@
             <div class="title">
                 <h2>Chart</h2>
             </div>
-            <div class="content">
-                <LineChart :chartData="testData" :options="options"/>
-                <LineChart :chartData="testData" :options="options"/>
+            <div class="body">
+                <div class="chart">
+                    <LineChart :chartData="testData" :options="options"/>
+                </div>
+                <div class="chart">
+                    <LineChart :chartData="testData" :options="options"/>
+                </div>
             </div>
         </div>
         <h2>History</h2>
@@ -79,12 +83,12 @@ body {
 }
 
 .charts {
-    .content {
+    .body {
         display: flex;
         flex-direction: row;
         overflow-x: auto;
         max-height: 200px;
-        div {
+        .chart div {
             min-width: 250px;
             height: 200px;
         }
