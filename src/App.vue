@@ -108,6 +108,9 @@ body, html, #app {
     padding: 8px 50px;
     border-radius: 50px;
     font-size: 1.2rem;
+    &:hover {
+        background-color: #59CF99;
+    }
 }
 
 .btn.btn-subtle {
