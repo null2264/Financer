@@ -1,6 +1,6 @@
 <template>
-    <AppLayoutBackBar />
-    <div>
+    <div class="login">
+        <AppLayoutBackBar />
         <slot />
     </div>
 </template>
@@ -17,4 +17,9 @@ export default {
 </script>
 
 <style scoped>
+.login {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
 </style>

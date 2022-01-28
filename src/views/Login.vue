@@ -1,5 +1,5 @@
 <template>
-    <div class="login">
+    <div class="content">
         <div class="greeting">
             <h2>Welcome Back</h2>
             <img class="image" id="login" src="../assets/login.png"/>
@@ -62,12 +62,12 @@ export default {
 </script>
 
 <style lang="scss">
-.login {
-    position: fixed;
+.login .content {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     .greeting {
         color: white;
         .image#login {
@@ -82,20 +82,23 @@ export default {
 }
 
 .users {
+    display: flex;
+    flex-direction: column;
     color: black;
     background-color: white;
     width: 100%;
     height: 100%;
     bottom: 0px;
     border-radius: 30px 30px 0px 0px;
+    overflow: hidden;
     .title {
         padding-top: 20px;
     }
     .body {
         display: flex;
-        padding: 20px;
+        margin: 20px;
         flex-direction: column;
-        max-height: 450px;
+        height: 100%;
         overflow-y: auto;
         .user {
             padding: 15px;
