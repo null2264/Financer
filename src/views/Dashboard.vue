@@ -116,8 +116,8 @@ body {
         overflow-x: auto;
         max-height: 200px;
         .chart {
-            padding: 20px;
-            padding-bottom: 0;
+            margin: 20px;
+            margin-bottom: 0;
             .btn {
                 color: black;
                 .detail {
@@ -135,7 +135,7 @@ body {
                 .graph {
                     min-width: 210px;
                     height: 110px;
-                    box-shadow: 0px 6px 6px -2px grey;
+                    box-shadow: 0px 4px 8px -4px grey;
                     margin-bottom: 10px;
                 }
             }

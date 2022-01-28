@@ -72,6 +72,10 @@ export default {
 <style lang="scss">
 @import url("static/scss/app.scss");
 
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
 body {
     margin: 0;
 }
